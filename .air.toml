@@ -1,0 +1,29 @@
+# .air.toml
+
+# General settings
+[build]
+bin = "bin/go_crud" # Path to the output binary
+cmd = "go build -o ./bin/go_crud ./cmd/go_crud/main.go" # Command to build the binary
+log = "air.log" # Log file
+
+# Watched directories with file extensions
+[watch]
+includes = [
+  "cmd/**/*.go",
+  "internal/**/*.go",
+  "pkg/**/*.go",
+  "config/**/*.go",
+  ".env",
+]
+excludes = [
+  "bin",
+  "scripts",
+  "migrations",
+  "docs",
+]
+
+# Run settings
+[run]
+cmd = "./bin/go_crud"
+watch_log = "true" # Enable log watching
+watch_delay = 500 # Delay in milliseconds between file changes and rebuild

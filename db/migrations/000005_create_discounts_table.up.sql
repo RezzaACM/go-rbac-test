@@ -1,0 +1,16 @@
+BEGIN;
+
+CREATE TABLE IF NOT EXISTS discounts (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR (100) NOT NULL,
+    type VARCHAR (20) NOT NULL,
+    value DECIMAL (25, 2) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT false,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+COMMIT;
