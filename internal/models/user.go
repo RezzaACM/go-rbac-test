@@ -6,6 +6,7 @@ type User struct {
 	Username string `json:"username"`
 	Password string `json:"-"`
 	Email    string `json:"email"`
+	BaseModel
 }
 
 type CreateUserRequest struct {

@@ -10,4 +10,8 @@ CREATE TABLE IF NOT EXISTS users(
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TRIGGER update_updated_at BEFORE
+UPDATE
+    ON users FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
 COMMIT;

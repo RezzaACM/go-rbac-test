@@ -30,7 +30,7 @@ help:
 	@echo "  build         - Build the binary"
 	@echo "  clean         - Clean up the binary"
 	@echo "  migration     - Create a new migration file"
-	@echo "	 	Example: make migrate MIGRATION_NAME='create_users_table'"
+	@echo "	 	Example: make migration MIGRATION_NAME='create_users_table'"
 	@echo "  migrate-up    - Run database migrations up"
 	@echo "  migrate-down  - Run database migrations down"
 	@echo "  deps          - Install required dependencies"
