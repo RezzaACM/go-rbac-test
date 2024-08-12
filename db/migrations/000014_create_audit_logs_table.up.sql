@@ -1,0 +1,18 @@
+BEGIN;
+
+CREATE TABLE IF NOT EXISTS audit_logs (
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    action VARCHAR(100) NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    details TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TRIGGER update_updated_at BEFORE
+UPDATE
+    ON audit_logs FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+COMMIT;

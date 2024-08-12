@@ -1,12 +1,21 @@
 package models
 
 type User struct {
-	ID       uint   `json:"id"`
-	Fullname string `json:"fullname"`
-	Username string `json:"username"`
-	Password string `json:"-"`
-	Email    string `json:"email"`
+	ID        uint            `json:"id" gorm:"primaryKey"`
+	Fullname  string          `json:"fullname"`
+	Username  string          `json:"username"`
+	Password  string          `json:"-"`
+	Email     string          `json:"email"`
+	UserRoles []UserRolesUser `json:"roles"`
 	BaseModel
+}
+
+type UserLoggedIn struct {
+	ID        uint            `json:"id"`
+	Fullname  string          `json:"fullname"`
+	Username  string          `json:"username"`
+	Email     string          `json:"email"`
+	UserRoles []UserRolesUser `json:"roles"`
 }
 
 type CreateUserRequest struct {

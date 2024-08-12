@@ -22,7 +22,7 @@ func NewUserHandler(cfg *config.Config) *UserHandler {
 
 func (h *UserHandler) GetUsers(c *gin.Context) {
 	var users []models.User
-	if err := h.db.Find(&users).Error; err != nil {
+	if err := h.db.Preload("UserRoles.Role").Find(&users).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

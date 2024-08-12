@@ -1,7 +1,7 @@
 package models
 
 type Role struct {
-	ID          uint   `json:"id"`
+	ID          uint   `json:"id" gorm:"primaryKey"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	ParentID    int    `json:"parent_id"`

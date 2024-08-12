@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"time"
 
+	"example.com/go-crud/internal/models"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 var secretKey = []byte("secret-key")
@@ -53,4 +55,19 @@ func VerifyToken(tokenString string) (bool, error) {
 	}
 
 	return true, nil
+}
+
+func GetUserByUsername(username string, db *gorm.DB) (models.UserLoggedIn, error) {
+	var user models.User
+	var userLoggedIn models.UserLoggedIn
+
+	if err := db.Where("username = ?", username).Preload("UserRoles.Role").First(&user).Error; err != nil {
+		return userLoggedIn, err
+	}
+	userLoggedIn.ID = user.ID
+	userLoggedIn.Fullname = user.Fullname
+	userLoggedIn.Username = user.Username
+	userLoggedIn.Email = user.Email
+	userLoggedIn.UserRoles = user.UserRoles
+	return userLoggedIn, nil
 }

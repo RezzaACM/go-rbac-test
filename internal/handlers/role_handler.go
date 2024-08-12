@@ -81,6 +81,12 @@ func (h *RoleHandler) GetRole(c *gin.Context) {
 }
 
 func (h *RoleHandler) CreateRole(c *gin.Context) {
+	// add transaction database
+	tx := h.db.Begin()
+
+	// get c.Get user id from middleware
+	user, _ := c.Get("user")
+	userID := user.(models.UserLoggedIn).ID
 	var role models.CreateRoleRequest
 	if err := c.ShouldBindJSON(&role); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -97,14 +103,29 @@ func (h *RoleHandler) CreateRole(c *gin.Context) {
 		return
 	}
 
-	if err := h.db.Create(&role).Error; err != nil {
+	if err := tx.Create(&role).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	// add action log to record input
+	actionLog := models.CreateActionLogRequest{
+		UserId:  uint(userID),
+		Action:  utils.CreateRole,
+		Details: "Create role: " + role.Name,
+	}
+	services.CreateActionLog(actionLog, tx)
+	tx.Commit()
 	utils.RespondJSON(c, http.StatusCreated, utils.StatusSuccessfully, role)
 }
 
 func (h *RoleHandler) UpdateRole(c *gin.Context) {
+	// add transaction database
+	tx := h.db.Begin()
+
+	// get c.Get user id from middleware
+	user, _ := c.Get("user")
+	userID := user.(models.UserLoggedIn).ID
 	var role models.UpdateRoleRequest
 	var fetchRole models.Role
 	id := c.Param("id")
@@ -143,16 +164,30 @@ func (h *RoleHandler) UpdateRole(c *gin.Context) {
 	}
 	role.ID = id
 
-	if err := h.db.Save(&role).Error; err != nil {
+	if err := tx.Save(&role).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
+	// add action log to record input
+	actionLog := models.CreateActionLogRequest{
+		UserId:  uint(userID),
+		Action:  utils.UpdateRole,
+		Details: "Update role: " + role.Name,
+	}
+	services.CreateActionLog(actionLog, tx)
+	tx.Commit()
 	utils.RespondJSON(c, http.StatusAccepted, utils.StatusSuccessfully, role)
 
 }
 
 func (h *RoleHandler) DeleteRole(c *gin.Context) {
+	// add transaction database
+	tx := h.db.Begin()
+
+	// get c.Get user id from middleware
+	user, _ := c.Get("user")
+	userID := user.(models.UserLoggedIn).ID
 	var role models.Role
 	id := c.Param("id")
 
@@ -177,6 +212,15 @@ func (h *RoleHandler) DeleteRole(c *gin.Context) {
 		"name": role.Name,
 	}
 
+	// add action log to record input
+	actionLog := models.CreateActionLogRequest{
+		UserId:  uint(userID),
+		Action:  utils.DeleteRole,
+		Details: "Delete role: " + role.Name,
+	}
+	services.CreateActionLog(actionLog, tx)
+
+	tx.Commit()
 	utils.RespondJSON(c, http.StatusAccepted, utils.ReplacePlaceholders(utils.StatusDeletedDataSucessfully, placeholders), role)
 
 }

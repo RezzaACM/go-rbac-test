@@ -17,9 +17,6 @@ func main() {
 	// initialize the logger
 	logger.InitLogger()
 
-	// Initialize database
-	// config.InitPosgresDB()
-
 	// Load configuration
 	cfg := config.LoadConfig()
 

@@ -15,6 +15,13 @@ type ResponseWithMeta struct {
 	Meta interface{} `json:"meta"`
 }
 
+// RespondJSON sends a JSON response with a status code, message, and payload.
+//
+// Parameters:
+// - w: gin.Context to write the response
+// - status: int representing the HTTP status code
+// - message: string containing the message to be included in the response
+// - payload: interface{} representing the data to be sent in the response
 func RespondJSON(w *gin.Context, status int, message string, payload interface{}) {
 	var res ResponseData
 	res.Status = status
@@ -24,6 +31,14 @@ func RespondJSON(w *gin.Context, status int, message string, payload interface{}
 	w.JSON(status, res)
 }
 
+// ResponseJSONWithMeta sends a JSON response with a meta field.
+//
+// Parameters:
+// - w: gin.Context to write the response
+// - status: int representing the HTTP status code
+// - message: string containing the message to be included in the response
+// - payload: interface{} representing the data to be sent in the response
+// - meta: interface{} containing metadata about the response
 func ResponseJSONWithMeta(w *gin.Context, status int, message string, payload interface{}, meta interface{}) {
 	var res ResponseWithMeta
 	res.Status = status
